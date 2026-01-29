@@ -1,10 +1,13 @@
-import express, { Application } from "express"
+import express, { Application, Request, Response, NextFunction } from "express"
 import mongoose from "mongoose"
+import TodoService from "./todo.service"
+import errorHandler from "./middlewares/errorHandler"
 
 interface AppInterface {
   startServer(): Promise<void>
   connectDatabase(): Promise<void>
   initializeRoutes(): void
+  todoRoutes(): void
 }
 
 class App implements AppInterface {
@@ -16,6 +19,7 @@ class App implements AppInterface {
     this.app = express()
 
     this.initializeRoutes()
+    this.todoRoutes()
   }
 
   public async connectDatabase(): Promise<void> {
@@ -34,6 +38,67 @@ class App implements AppInterface {
     this.app.get("/", (_req, res) => {
       res.send("API is running")
     })
+  }
+
+  public todoRoutes(): void {
+    // Todo routes
+    this.app.post("/todos", async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { title } = req.body
+        const todo = await TodoService.createTodo(title)
+        res.status(201).json(todo)
+      } catch (error) {
+        next(error)
+      }
+    })
+
+    this.app.get("/todos", async (_req: Request, res: Response, next: NextFunction) => {
+      try {
+        const todos = await TodoService.getTodos()
+        res.status(200).json(todos)
+      } catch (error) {
+        next(error)
+      }
+    })
+
+    this.app.get("/todos/:id", async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const todo = await TodoService.getTodoById(req.params.id)
+        if (!todo) {
+          return res.status(404).json({ error: "Todo not found" })
+        }
+        res.status(200).json(todo)
+      } catch (error) {
+        next(error)
+      }
+    })
+
+    this.app.put("/todos/:id", async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const { title } = req.body
+        const todo = await TodoService.updateTodo(req.params.id, title)
+        if (!todo) {
+          return res.status(404).json({ error: "Todo not found" })
+        }
+        res.status(200).json(todo)
+      } catch (error) {
+        next(error)
+      }
+    })
+
+    this.app.delete("/todos/:id", async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        const todo = await TodoService.deleteTodo(req.params.id)
+        if (!todo) {
+          return res.status(404).json({ error: "Todo not found" })
+        }
+        res.status(204).send()
+      } catch (error) {
+        next(error)
+      }
+    })
+
+    this.app.use(errorHandler)
   }
 
   public async startServer(): Promise<void> {
