@@ -1,7 +1,7 @@
 import { Schema,Document,model } from "mongoose";
 export interface Todo_interface extends Document{
-    title:String;
+    title:string;
 }
-const todoSchema=new Schema({title:String})
-const TodoModel=model('task',todoSchema)
+const todoSchema=new Schema({title:{type:String,required:true}})
+const TodoModel=model<Todo_interface>('task',todoSchema)
 export default TodoModel

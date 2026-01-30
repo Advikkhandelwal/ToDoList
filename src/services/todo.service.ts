@@ -1,4 +1,4 @@
-import TodoModel, { Todo_interface } from "./schema/todo.schema"
+import TodoModel, { Todo_interface } from "../schema/todo.schema"
 
 class TodoService {
   public async createTodo(title: string): Promise<Todo_interface> {

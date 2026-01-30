@@ -1,13 +1,15 @@
-import express, { Application, Request, Response, NextFunction } from "express"
+import express, { Application } from "express"
 import mongoose from "mongoose"
-import TodoService from "./todo.service"
+import { Routes } from "./interfaces/routes.interface"
+import TodoRoute from "./routes/todo.route"
 import errorHandler from "./middlewares/errorHandler"
 
 interface AppInterface {
   startServer(): Promise<void>
   connectDatabase(): Promise<void>
-  initializeRoutes(): void
-  todoRoutes(): void
+  initializeRoutes(routes: Routes[]): void
+  initializeMiddlewares(): void
+  initializeErrorHandling(): void
 }
 
 class App implements AppInterface {
@@ -18,12 +20,16 @@ class App implements AppInterface {
     this.port = port
     this.app = express()
 
-    this.initializeRoutes()
-    this.todoRoutes()
+    this.initializeMiddlewares()
+    this.initializeRoutes([new TodoRoute()])
+    this.initializeErrorHandling()
   }
 
   public async connectDatabase(): Promise<void> {
     try {
+      if (!process.env.MONGO_URI) {
+        throw new Error("MONGO_URI is not defined");
+      }
       await mongoose.connect(process.env.MONGO_URI as string)
       console.log("Database connected successfully")
     } catch (err) {
@@ -32,78 +38,26 @@ class App implements AppInterface {
     }
   }
 
-  public initializeRoutes(): void {
+  public initializeMiddlewares(): void {
     this.app.use(express.json())
+  }
 
+  public initializeRoutes(routes: Routes[]): void {
     this.app.get("/", (_req, res) => {
       res.send("API is running")
     })
+
+    routes.forEach((route) => {
+      this.app.use("/", route.router)
+    })
   }
 
-  public todoRoutes(): void {
-    // Todo routes
-    this.app.post("/todos", async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { title } = req.body
-        const todo = await TodoService.createTodo(title)
-        res.status(201).json(todo)
-      } catch (error) {
-        next(error)
-      }
-    })
-
-    this.app.get("/todos", async (_req: Request, res: Response, next: NextFunction) => {
-      try {
-        const todos = await TodoService.getTodos()
-        res.status(200).json(todos)
-      } catch (error) {
-        next(error)
-      }
-    })
-
-    this.app.get("/todos/:id", async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const todo = await TodoService.getTodoById(req.params.id)
-        if (!todo) {
-          return res.status(404).json({ error: "Todo not found" })
-        }
-        res.status(200).json(todo)
-      } catch (error) {
-        next(error)
-      }
-    })
-
-    this.app.put("/todos/:id", async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const { title } = req.body
-        const todo = await TodoService.updateTodo(req.params.id, title)
-        if (!todo) {
-          return res.status(404).json({ error: "Todo not found" })
-        }
-        res.status(200).json(todo)
-      } catch (error) {
-        next(error)
-      }
-    })
-
-    this.app.delete("/todos/:id", async (req: Request, res: Response, next: NextFunction) => {
-      try {
-        const todo = await TodoService.deleteTodo(req.params.id)
-        if (!todo) {
-          return res.status(404).json({ error: "Todo not found" })
-        }
-        res.status(204).send()
-      } catch (error) {
-        next(error)
-      }
-    })
-
+  public initializeErrorHandling(): void {
     this.app.use(errorHandler)
   }
 
   public async startServer(): Promise<void> {
     await this.connectDatabase()
-
     this.app.listen(this.port, () => {
       console.log(`Server running on http://localhost:${this.port}`)
     })
