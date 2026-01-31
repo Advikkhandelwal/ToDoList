@@ -1,0 +1,60 @@
+.todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    background-color: var(--color-dark-gray);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.todo-item:hover {
+    transform: translateY(-2px);
+    border-color: var(--color-gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.todo-text {
+    flex: 1;
+    font-size: 1rem;
+    color: var(--color-text);
+    margin-right: 12px;
+}
+
+.todo-edit-input {
+    flex: 1;
+    padding: 8px;
+    background-color: transparent;
+    border: 1px solid var(--color-gold);
+    border-radius: 4px;
+    color: var(--color-text);
+    margin-right: 12px;
+}
+
+.todo-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.todo-btn {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
+    transition: color 0.2s, background-color 0.2s;
+}
+
+.todo-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text);
+}
+
+.delete-btn:hover {
+    color: #ff4d4d;
+}
+
+.edit-btn:hover {
+    color: var(--color-gold);
+}
