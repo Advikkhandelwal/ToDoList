@@ -2,8 +2,6 @@ import { Request, Response, NextFunction } from "express"
 import TodoService from "../services/todo.service"
 
 class TodoController {
-    // Use arrow functions to bind 'this' automatically
-
     public createTodo = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
             const { title } = req.body
@@ -11,7 +9,7 @@ class TodoController {
                 res.status(400).json({ error: "Title is required" });
                 return;
             }
-            const todo = await TodoService.createTodo(title)
+            const todo = await TodoService.createTodo(req.body)
             res.status(201).json(todo)
         } catch (error) {
             next(error)
@@ -42,12 +40,7 @@ class TodoController {
 
     public updateTodo = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         try {
-            const { title } = req.body
-            if (!title) {
-                res.status(400).json({ error: "Title is required for update" });
-                return;
-            }
-            const todo = await TodoService.updateTodo(req.params.id as string, title)
+            const todo = await TodoService.updateTodo(req.params.id as string, req.body)
             if (!todo) {
                 res.status(404).json({ error: "Todo not found" })
                 return;

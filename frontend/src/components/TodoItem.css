@@ -1,60 +1,144 @@
-.todo-item {
+.todo-item-card {
+    background: var(--item-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all 0.2s ease;
+}
+
+.todo-item-card:hover {
+    border-color: var(--color-gold);
+    background: var(--item-hover);
+    transform: translateX(4px);
+}
+
+.todo-item-card.completed {
+    opacity: 0.7;
+}
+
+.todo-item-card.overdue {
+    border-left: 4px solid #ff4d4d;
+}
+
+.item-main-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    background-color: var(--color-dark-gray);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    margin-bottom: 12px;
-    transition: transform 0.2s, border-color 0.2s;
+    padding: 1rem;
+    gap: 1rem;
 }
 
-.todo-item:hover {
-    transform: translateY(-2px);
-    border-color: var(--color-gold);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.complete-toggle {
+    color: var(--text-muted);
+    flex-shrink: 0;
 }
 
-.todo-text {
+.complete-toggle:hover {
+    color: var(--color-gold);
+}
+
+.check-icon {
+    color: var(--color-gold);
+}
+
+.title-section {
     flex: 1;
-    font-size: 1rem;
-    color: var(--color-text);
-    margin-right: 12px;
-}
-
-.todo-edit-input {
-    flex: 1;
-    padding: 8px;
-    background-color: transparent;
-    border: 1px solid var(--color-gold);
-    border-radius: 4px;
-    color: var(--color-text);
-    margin-right: 12px;
-}
-
-.todo-actions {
     display: flex;
-    gap: 8px;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
 }
 
-.todo-btn {
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-size: 1.2rem;
-    color: var(--color-text-muted);
-    transition: color 0.2s, background-color 0.2s;
+.todo-title-text {
+    font-size: 1.1rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.todo-btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--color-text);
+.completed .todo-title-text {
+    text-decoration: line-through;
+    color: var(--text-muted);
+}
+
+.edit-input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--color-gold);
+    color: var(--text-color);
+    font-size: 1.1rem;
+    padding: 0;
+}
+
+.badge-row {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.priority-badge {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.category-tag {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.due-date-badge {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.due-date-badge.danger {
+    color: #ff4d4d;
+}
+
+.item-actions {
+    display: flex;
+    gap: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.todo-item-card:hover .item-actions {
+    opacity: 1;
+}
+
+.action-btn {
+    padding: 6px;
+    border-radius: 6px;
+    color: var(--text-muted);
+}
+
+.action-btn:hover {
+    background: var(--border-color);
+    color: var(--text-color);
 }
 
 .delete-btn:hover {
     color: #ff4d4d;
 }
 
-.edit-btn:hover {
-    color: var(--color-gold);
+.item-expanded-content {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.description-text {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    white-space: pre-wrap;
 }

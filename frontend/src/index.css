@@ -1,15 +1,35 @@
 :root {
-  --color-black: #050505;
-  --color-dark-gray: #1a1a1a;
+  /* Dark Theme (Default) */
+  --bg-color: #050505;
+  --card-bg: #111111;
+  --text-color: #ffffff;
+  --text-muted: #a0a0a0;
+  --border-color: #222222;
+  --item-bg: #1a1a1a;
+  --item-hover: #252525;
+
   --color-gold: #D4AF37;
   --color-gold-hover: #b5952f;
-  --color-text: #ffffff;
-  --color-text-muted: #a0a0a0;
-  --color-border: #333333;
   --radius-md: 8px;
   --radius-lg: 12px;
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
-  --shadow-gold: 0 4px 14px 0 rgba(212, 175, 55, 0.39);
+  --shadow-gold: 0 4px 14px 0 rgba(212, 175, 55, 0.2);
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.5);
+
+  --priority-low: #4caf50;
+  --priority-medium: #ff9800;
+  --priority-high: #D4AF37;
+}
+
+[data-theme='light'] {
+  --bg-color: #f5f5f7;
+  --card-bg: #ffffff;
+  --text-color: #1d1d1f;
+  --text-muted: #86868b;
+  --border-color: #d2d2d7;
+  --item-bg: #f5f5f7;
+  --item-hover: #e8e8ed;
+  --shadow-card: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 * {
@@ -20,13 +40,14 @@
 
 body {
   font-family: var(--font-main);
-  background-color: var(--color-black);
-  color: var(--color-text);
+  background-color: var(--bg-color);
+  color: var(--text-color);
   min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
   line-height: 1.5;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 button {
@@ -34,24 +55,34 @@ button {
   border: none;
   background: none;
   font-family: inherit;
+  transition: all 0.2s ease;
 }
 
-input {
+input,
+select,
+textarea {
   outline: none;
   font-family: inherit;
+  background: var(--item-bg);
+  color: var(--text-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
-  background: var(--color-black);
+  background: var(--bg-color);
 }
+
 ::-webkit-scrollbar-thumb {
-  background: var(--color-dark-gray);
+  background: var(--border-color);
   border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold);
 }
