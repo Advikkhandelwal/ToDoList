@@ -22,10 +22,9 @@ This project requires running both the backend and frontend servers.
 Open a terminal in the root directory:
 
 ```bash
-# Install dependencies
+
 npm install
 
-# Start the backend server (runs on port 5000)
 npm run dev
 ```
 
@@ -36,7 +35,6 @@ Open a new terminal and navigate to the `frontend` directory:
 ```bash
 cd frontend
 
-# Install dependencies
 npm install
 
 # Start the frontend dev server
